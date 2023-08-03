@@ -1,10 +1,19 @@
-
+import Header from './components/Header';
+import Footer from './components/Footer';
+import { Container } from 'react-bootstrap'
 
 const App = () => {
   return (
-    <div className="App" >
-      Hello Project
-    </div >
+    <>
+      <Header />
+      <main>
+        <Container>
+          <h1>Welcome to Crasop</h1>
+
+        </Container>
+      </main>
+      <Footer />
+    </>
   );
 }
 
