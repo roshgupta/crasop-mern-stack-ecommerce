@@ -1,0 +1,14 @@
+{
+  "name": "crasop",
+  "version": "1.0.0",
+  "description": "This is a MERN Stack Ecommerce Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon backend/server.js"
+  },
+  "author": "Roshan Gupta",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
