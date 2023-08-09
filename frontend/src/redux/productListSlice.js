@@ -7,15 +7,15 @@ const initialState = {
   error: null
 }
 export const listProducts = createAsyncThunk(
-  'product/listProducts',
+  'products/listProducts',
   async () => {
     const { data } = await axios.get('/api/products')
     return data
   }
 )
 
-export const productSlice = createSlice({
-  name: 'product',
+export const productListSlice = createSlice({
+  name: 'products',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -35,4 +35,4 @@ export const productSlice = createSlice({
 
 
 
-export default productSlice.reducer
+export default productListSlice.reducer

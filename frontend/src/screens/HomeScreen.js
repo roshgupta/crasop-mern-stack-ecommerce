@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import Product from '../components/Product'
-import { listProducts } from '../redux/productSlice'
+import { listProducts } from '../redux/productListSlice'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 
 const HomeScreen = () => {
   const dispatch = useDispatch()
-  const product = useSelector((state) => state.product)
-  const { loading, error, products } = product
+  const productList = useSelector((state) => state.products)
+  const { loading, error, products } = productList
 
 
   useEffect(() => {
