@@ -7,26 +7,29 @@ const initialState = {
 }
 export const cartAddItem = createAsyncThunk(
   'product/cartAddItem',
-  async (d, thunkAPI) => {
+  async (d) => {
     const { id, qty } = d
     const { data } = await axios.get(`/api/products/${id}`)
-    const payload = {
+    return {
       product: data._id,
       name: data.name,
       image: data.image,
       price: data.price,
       countInStock: data.countInStock,
-      qty: qty
+      qty: Number(qty)
     }
-    localStorage.setItem('cartItems', JSON.stringify(thunkAPI.getState().cart.cartItems))
-    return payload
   }
 )
 
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {},
+  reducers: {
+    cartRemoveItem: (state, action) => {
+      state.cartItems = state.cartItems.filter((x) => x.product !== action.payload)
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(cartAddItem.fulfilled, (state, action) => {
       const item = action.payload
@@ -37,6 +40,7 @@ export const cartSlice = createSlice({
       } else {
         state.cartItems = [...state.cartItems, item]
       }
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
     })
     builder.addCase(cartAddItem.rejected, (state, action) => {
       state.error = action.error.message
@@ -44,6 +48,6 @@ export const cartSlice = createSlice({
   }
 })
 
-
+export const { cartRemoveItem } = cartSlice.actions
 
 export default cartSlice.reducer

@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
-import { cartAddItem } from '../redux/cartSlice'
+import { cartAddItem, cartRemoveItem } from '../redux/cartSlice'
 
 const CartScreen = () => {
-  const { id } = useParams();
-  const qty = new URLSearchParams(useLocation().search).get('qty')
+  const { id } = useParams()
+  const query = new URLSearchParams(useLocation().search)
+  const qty = Number(query.get('qty'))
   const dispatch = useDispatch()
   const naviagte = useNavigate()
   const cart = useSelector(state => state.cart)
@@ -23,7 +24,7 @@ const CartScreen = () => {
   }, [dispatch, id, qty])
 
   const removeFromCartHandler = (id) => {
-    console.log(id, "Remove")
+    dispatch(cartRemoveItem(id))
   }
 
   const checkoutHandler = () => {
@@ -54,7 +55,7 @@ const CartScreen = () => {
                     <Form.Control
                       as='select'
                       value={item.qty}
-                      onChange={e => dispatch(cartAddItem(item.product, Number(e.target.value)))}
+                      onChange={e => dispatch(cartAddItem({ id: item.product, qty: e.target.value }))}
                     >
                       {[...Array(item.countInStock).keys()].map(x => (
                         <option key={x + 1} value={x + 1}>
@@ -79,7 +80,7 @@ const CartScreen = () => {
           <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) items
+                Subtotal {cartItems.reduce((acc, item) => acc + item.qty, 0)} items
               </h2>
               $ {cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
             </ListGroup.Item>
