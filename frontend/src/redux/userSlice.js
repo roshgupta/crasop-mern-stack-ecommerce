@@ -25,14 +25,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(listProducts.pending, (state) => {
+    builder.addCase(login.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(listProducts.fulfilled, (state, action) => {
+    builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false
       state.userInfo = action.payload
     })
-    builder.addCase(listProducts.rejected, (state, action) => {
+    builder.addCase(login.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message
     })
