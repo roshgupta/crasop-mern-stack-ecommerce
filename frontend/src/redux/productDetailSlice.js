@@ -9,8 +9,12 @@ const initialState = {
 export const productDetail = createAsyncThunk(
   'product/productDetail',
   async (id) => {
-    const { data } = await axios.get(`/api/products/${id}`)
-    return data
+    try {
+      const { data } = await axios.get(`/api/products/${id}`)
+      return data
+    } catch (error) {
+      throw new Error(error.response && error.response.data.message ? error.response.data.message : error.message)
+    }
   }
 )
 

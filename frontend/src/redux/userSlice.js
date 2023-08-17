@@ -9,21 +9,34 @@ const initialState = {
 export const login = createAsyncThunk(
   'user/login',
   async (payload) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+      const { data } = await axios.post('/api/users/login', payload, config)
+      localStorage.setItem('userInfo', JSON.stringify(data))
+      return data
+    } catch (error) {
+      throw new Error(error.response && error.response.data.message ? error.response.data.message : error.message)
     }
-    const { data } = await axios.post('/api/users/login', payload, config)
-    localStorage.setItem('userInfo', JSON.stringify(data))
-    return data
+
   }
 )
+
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      localStorage.removeItem('userInfo')
+      state.userInfo = null
+      state.loading = null
+      state.error = null
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.loading = true
@@ -39,6 +52,6 @@ export const userSlice = createSlice({
   }
 })
 
-
+export const { logout } = userSlice.actions
 
 export default userSlice.reducer
