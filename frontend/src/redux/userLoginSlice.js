@@ -30,11 +30,9 @@ export const userLoginSlice = createSlice({
   name: 'userLogin',
   initialState,
   reducers: {
-    logout: (state) => {
+    logout: () => {
       localStorage.removeItem('userInfo')
-      state.userInfo = null
-      state.loading = null
-      state.error = null
+      return {}
     }
   },
   extraReducers: (builder) => {
