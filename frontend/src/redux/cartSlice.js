@@ -7,8 +7,8 @@ const initialState = {
 }
 export const cartAddItem = createAsyncThunk(
   'product/cartAddItem',
-  async (d) => {
-    const { id, qty } = d
+  async (payload) => {
+    const { id, qty } = payload
     const { data } = await axios.get(`/api/products/${id}`)
     return {
       product: data._id,
