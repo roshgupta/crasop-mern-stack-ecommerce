@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { login } from '../redux/userSlice'
+import { login } from '../redux/userLoginSlice'
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('')

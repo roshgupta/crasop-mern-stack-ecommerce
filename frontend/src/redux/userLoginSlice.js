@@ -7,7 +7,7 @@ const initialState = {
   error: null
 }
 export const login = createAsyncThunk(
-  'user/login',
+  'userLogin/login',
   async (payload) => {
     try {
       const config = {
@@ -26,8 +26,8 @@ export const login = createAsyncThunk(
 )
 
 
-export const userSlice = createSlice({
-  name: 'user',
+export const userLoginSlice = createSlice({
+  name: 'userLogin',
   initialState,
   reducers: {
     logout: (state) => {
@@ -38,20 +38,16 @@ export const userSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(login.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.loading = false
-      state.userInfo = action.payload
-    })
-    builder.addCase(login.rejected, (state, action) => {
-      state.loading = false
-      state.error = action.error.message
+    builder.addCase(login.pending, () => {
+      return { loading: true }
+    }).addCase(login.fulfilled, (state, action) => {
+      return { loading: false, userInfo: action.payload }
+    }).addCase(login.rejected, (state, action) => {
+      return { loading: false, error: action.payload }
     })
   }
 })
 
-export const { logout } = userSlice.actions
+export const { logout } = userLoginSlice.actions
 
-export default userSlice.reducer
+export default userLoginSlice.reducer

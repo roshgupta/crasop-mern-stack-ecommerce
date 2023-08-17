@@ -45,6 +45,7 @@ export const cartSlice = createSlice({
         state.cartItems = [...state.cartItems, item]
       }
       localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+      state.error = null
     })
     builder.addCase(cartAddItem.rejected, (state, action) => {
       state.error = action.error.message

@@ -23,16 +23,14 @@ export const productListSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(listProducts.pending, (state) => {
-      state.loading = true
+    builder.addCase(listProducts.pending, () => {
+      return { loading: true, products: [] }
     })
     builder.addCase(listProducts.fulfilled, (state, action) => {
-      state.loading = false
-      state.products = action.payload
+      return { loading: false, products: action.payload }
     })
     builder.addCase(listProducts.rejected, (state, action) => {
-      state.loading = false
-      state.error = action.error.message
+      return { loading: false, error: action.payload }
     })
   }
 })
