@@ -3,14 +3,13 @@ import axios from 'axios'
 
 const initialState = {
   loading: false,
-  user: {},
+  userInfo: null,
   error: null
 }
-export const getUserDetails = createAsyncThunk(
-  'userDetail/getUserDetails',
-  async (id, { dispatch, getState }) => {
+export const updateUserProfile = createAsyncThunk(
+  'userUpdateProfileSlice/register',
+  async (user, { getState }) => {
     try {
-
       const { userLogin: { userInfo } } = getState()
 
       const config = {
@@ -19,8 +18,7 @@ export const getUserDetails = createAsyncThunk(
           Authorization: `Bearer ${userInfo.token}`
         },
       }
-
-      const { data } = await axios.get(`/api/users/${id}`, config)
+      const { data } = await axios.put('/api/users/profile', user, config)
 
       return data
     } catch (error) {
@@ -31,22 +29,22 @@ export const getUserDetails = createAsyncThunk(
 )
 
 
-export const userDetailSlice = createSlice({
-  name: 'userDetail',
+export const userUpdateProfileSlice = createSlice({
+  name: 'userUpdateProfileSlice',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getUserDetails.pending, (state) => {
-      return { ...state, loading: true }
-    }).addCase(getUserDetails.fulfilled, (state, action) => {
-      return { loading: false, user: action.payload }
-    }).addCase(getUserDetails.rejected, (state, action) => {
+    builder.addCase(updateUserProfile.pending, () => {
+      return { loading: true }
+    }).addCase(updateUserProfile.fulfilled, (state, action) => {
+      return { loading: false, success: true, userInfo: action.payload }
+    }).addCase(updateUserProfile.rejected, (state, action) => {
       console.log(action)
       return { loading: false, error: action.error.message }
-    })
+    }).addDefaultCase(state => state)
   }
 })
 
 
 
-export default userDetailSlice.reducer
+export default userUpdateProfileSlice.reducer

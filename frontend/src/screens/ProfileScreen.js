@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getUserDetails } from '../redux/userDetailSlice'
+import { updateUserProfile } from '../redux/userUpdateProfileSlice';
 
 const ProfileScreen = () => {
   const [name, setName] = useState('')
@@ -16,11 +17,14 @@ const ProfileScreen = () => {
   const dispatch = useDispatch()
   const naviagte = useNavigate()
 
-  const userDetails = useSelector(state => state.userDetails)
-  const { loading, error, user } = userDetails
+  const userDetail = useSelector(state => state.userDetail)
+  const { loading, error, user } = userDetail
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const userUpdateProfile = useSelector(state => state.userUpdateProfile)
+  const { success } = userUpdateProfile
 
   useEffect(() => {
     if (!userInfo) {
@@ -40,7 +44,7 @@ const ProfileScreen = () => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      // DISPATCH UPDATE PROFILE
+      dispatch(updateUserProfile({ id: user._id, name, email, password }))
     }
   }
   return (
@@ -49,6 +53,7 @@ const ProfileScreen = () => {
         <h2>Sign Up</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
+        {success && <Message variant='success'>Profile Updated!</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name' className='my-3'>
