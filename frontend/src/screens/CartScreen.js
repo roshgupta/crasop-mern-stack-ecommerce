@@ -28,7 +28,7 @@ const CartScreen = () => {
   }
 
   const checkoutHandler = () => {
-    naviagte('/login?redirect=shipping')
+    naviagte('/login?redirect=/shipping')
   }
 
   return (

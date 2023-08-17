@@ -30,7 +30,7 @@ export const productListSlice = createSlice({
       return { loading: false, products: action.payload }
     })
     builder.addCase(listProducts.rejected, (state, action) => {
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.error.message, products: [] }
     })
   }
 })

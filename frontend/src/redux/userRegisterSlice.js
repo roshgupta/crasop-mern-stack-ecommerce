@@ -3,19 +3,23 @@ import axios from 'axios'
 
 const initialState = {
   loading: false,
-  userInfo: {},
+  userInfo: null,
   error: null
 }
-export const login = createAsyncThunk(
-  'userLogin/login',
-  async (payload) => {
+export const register = createAsyncThunk(
+  'userRegister/register',
+  async (payload, { dispatch }) => {
     try {
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       }
-      const { data } = await axios.post('/api/users/login', payload, config)
+      const { data } = await axios.post('/api/users', payload, config)
+      dispatch({
+        type: 'userLogin/login/fulfilled',
+        payload: data
+      })
       localStorage.setItem('userInfo', JSON.stringify(data))
       return data
     } catch (error) {
@@ -26,26 +30,22 @@ export const login = createAsyncThunk(
 )
 
 
-export const userLoginSlice = createSlice({
-  name: 'userLogin',
+export const userRegisterSlice = createSlice({
+  name: 'userRegister',
   initialState,
-  reducers: {
-    logout: () => {
-      localStorage.removeItem('userInfo')
-      return {}
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(login.pending, () => {
+    builder.addCase(register.pending, () => {
       return { loading: true }
-    }).addCase(login.fulfilled, (state, action) => {
+    }).addCase(register.fulfilled, (state, action) => {
       return { loading: false, userInfo: action.payload }
-    }).addCase(login.rejected, (state, action) => {
+    }).addCase(register.rejected, (state, action) => {
+      console.log(action)
       return { loading: false, error: action.error.message }
     })
   }
 })
 
-export const { logout } = userLoginSlice.actions
 
-export default userLoginSlice.reducer
+
+export default userRegisterSlice.reducer
